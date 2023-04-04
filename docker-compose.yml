@@ -1,6 +1,6 @@
 version: '3.8'
 services:
-  backend:
+  server:
     stdin_open: true
     tty: true
     container_name: softkeyz
@@ -13,14 +13,28 @@ services:
     ports:
       - '8888:8888'
     command: npm run dev
-  # client:
-  #   stdin_open: true
-  #   tty: true
-  #   container_name: softkeyz:client
-  #   build:
-  #     context: ./client
-  #     dockerfile: Dockerfile
-  #   volumes:
-  #     - ./client:/app/client
-  #     - /app/client/node_modules
-  #     - /app/client/.next
+  client:
+    stdin_open: true
+    tty: true
+    container_name: softkeyz-client
+    build:
+      context: ./client
+      dockerfile: Dockerfile
+    volumes:
+      - ./client:/app/client
+      - /app/client/node_modules
+      - /app/client/.next
+    ports:
+      - '3000:3000'
+  admin:
+    stdin_open: true
+    tty: true
+    container_name: softkeyz-admin
+    build:
+      context: ./admin
+      dockerfile: Dockerfile
+    volumes:
+      - ./admin:/app/admin
+      - /app/admin/node_modules
+    ports:
+      - '5173:5173'
