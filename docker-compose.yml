@@ -1,55 +1,12 @@
 version: '3.8'
 services:
-  server:
-    stdin_open: true
-    tty: true
-    container_name: softkeyz
-    build:
-      context: ./
-      dockerfile: Dockerfile
-    volumes:
-      - .:/app
-      - /app/node_modules
-    ports:
-      - '8888:8888'
-    command: npm run dev
-    environment:
-      DATABASE_URL: 'postgresql://${POSTGRESQL_USERNAME}:${POSTGRESQL_PASSWORD}@postgresql:${POSTGRESQL_PORT}/${POSTGRESQL_DATABASE}?schema=public'
-    depends_on:
-      - postgresql
-      - redis
-      - mongo
-  client:
-    stdin_open: true
-    tty: true
-    container_name: softkeyz-client
-    build:
-      context: ./client
-      dockerfile: Dockerfile
-    volumes:
-      - ./client:/app/client
-      - /app/client/node_modules
-      - /app/client/.next
-    ports:
-      - '3000:3000'
-  admin:
-    stdin_open: true
-    tty: true
-    container_name: softkeyz-admin
-    build:
-      context: ./admin
-      dockerfile: Dockerfile
-    volumes:
-      - ./admin:/app/admin
-      - /app/admin/node_modules
-    ports:
-      - '5173:5173'
   redis:
     image: redis
     ports:
       - 6379:6379
     volumes:
       - redisDB:/data
+
   mongo:
     image: mongo
     restart: always
@@ -60,6 +17,7 @@ services:
       MONGO_INITDB_ROOT_PASSWORD: example
     volumes:
       - mongoDB:/data
+
   postgresql:
     image: 'bitnami/postgresql:latest'
     restart: always
@@ -71,6 +29,54 @@ services:
       POSTGRESQL_DATABASE: ${POSTGRESQL_DATABASE}
     volumes:
       - progresDB:/data
+
+  nginx:
+    depends_on:
+      - api
+      - admin
+      - client
+    build:
+      dockerfile: Dockerfile
+      context: ./nginx
+    restart: always
+    ports:
+      - '80:80'
+    volumes:
+      - ./nginx:/app/nginx
+  api:
+    build:
+      context: ./
+      dockerfile: Dockerfile
+    volumes:
+      - .:/app
+      - /app/node_modules
+    environment:
+      DATABASE_URL: 'postgresql://${POSTGRESQL_USERNAME}:${POSTGRESQL_PASSWORD}@postgresql:${POSTGRESQL_PORT}/${POSTGRESQL_DATABASE}?schema=public'
+    depends_on:
+      - postgresql
+      - redis
+      - mongo
+    ports:
+      - '8888:8888'
+  client:
+    build:
+      context: ./client
+      dockerfile: Dockerfile
+    volumes:
+      - ./client:/app/client
+      - /app/client/node_modules
+      - /app/client/.next
+    ports:
+      - '3000:3000'
+  admin:
+    build:
+      context: ./admin
+      dockerfile: Dockerfile
+    volumes:
+      - ./admin:/app/admin
+      - /app/admin/node_modules
+    ports:
+      - '5173:5173'
 volumes:
   progresDB:
   redisDB:
