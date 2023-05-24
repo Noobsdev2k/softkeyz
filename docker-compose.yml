@@ -29,8 +29,6 @@ services:
       POSTGRESQL_DATABASE: softkeyz_db
     volumes:
       - progresDB:/data
-    env_file:
-      - .env
 
   nginx:
     depends_on:
@@ -60,8 +58,6 @@ services:
       - mongo
     ports:
       - '8888:8888'
-    env_file:
-      - .env
 
   client:
     build:
@@ -73,8 +69,7 @@ services:
       - /app/client/.next
     ports:
       - '3000:3000'
-    env_file:
-      - ./client/.env
+
   admin:
     build:
       context: ./admin
@@ -84,8 +79,7 @@ services:
       - /app/admin/node_modules
     ports:
       - '5173:5173'
-    env_file:
-      - ./admin/.env
+
 volumes:
   progresDB:
   redisDB:
