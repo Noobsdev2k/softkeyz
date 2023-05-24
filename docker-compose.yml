@@ -51,7 +51,7 @@ services:
       - .:/app
       - /app/node_modules
     environment:
-      DATABASE_URL: 'postgresql://my_user:$password123@postgresql:5432/softkeyz_db?schema=public'
+      DATABASE_URL: 'postgresql://my_user:password123@postgresql:5432/softkeyz_db?schema=public'
     depends_on:
       - postgresql
       - redis
