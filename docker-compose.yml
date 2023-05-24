@@ -22,11 +22,11 @@ services:
     image: 'bitnami/postgresql:latest'
     restart: always
     ports:
-      - ${POSTGRESQL_PORT}:5432
+      - 5432:5432
     environment:
-      POSTGRESQL_USERNAME: ${POSTGRESQL_USERNAME}
-      POSTGRESQL_PASSWORD: ${POSTGRESQL_PASSWORD}
-      POSTGRESQL_DATABASE: ${POSTGRESQL_DATABASE}
+      POSTGRESQL_USERNAME: my_user
+      POSTGRESQL_PASSWORD: password123
+      POSTGRESQL_DATABASE: softkeyz_db
     volumes:
       - progresDB:/data
     env_file:
@@ -53,7 +53,7 @@ services:
       - .:/app
       - /app/node_modules
     environment:
-      DATABASE_URL: 'postgresql://${POSTGRESQL_USERNAME}:${POSTGRESQL_PASSWORD}@postgresql:${POSTGRESQL_PORT}/${POSTGRESQL_DATABASE}?schema=public'
+      DATABASE_URL: 'postgresql://my_user:$password123@postgresql:5432/softkeyz_db?schema=public'
     depends_on:
       - postgresql
       - redis
