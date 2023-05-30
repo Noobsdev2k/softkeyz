@@ -77,6 +77,16 @@ services:
       - /app/admin/node_modules
     ports:
       - '5173:5173'
+  vue:
+    build:
+      context: ./vue
+      dockerfile: Dockerfile
+    volumes:
+      - ./vue:/app/admin
+      - /app/vue/node_modules
+      - /app/vue/.nuxt
+    ports:
+      - '5000:5000'
 volumes:
   progresDB:
   redisDB:
