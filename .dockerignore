@@ -1,6 +1,6 @@
-node_modules
-dist
-client
-admin
-mobile
+/node_modules/
+/dist/
+/client/
+/admin/
+/mobile/
 .env
