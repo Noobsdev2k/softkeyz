@@ -2,6 +2,16 @@
 const nextConfig = {
   reactStrictMode: true,
   // basePath: '/',
+  output: 'export',
+  trailingSlash: true,
+  distDir: 'dist',
+  images: {
+    unoptimized: true
+    // domains: ['res.cloudinary.com']
+  },
+  // eslint: {
+  //   ignoreDuringBuilds: true
+  // },
   webpackDevMiddleware: (config) => {
     config.watchOptions = {
       poll: 1000,
